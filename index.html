@@ -114,6 +114,28 @@ cards:[
 log:[]};
 
 var S=JSON.parse(localStorage.getItem('traject')||'null')||SEED;
+
+function migrate(){
+  if((S.v||1)>=2)return;
+  S.open=(S.open||[]).filter(function(o){return o.q.indexOf('psychometrie of onderzoeksmethoden')<0});
+  S.open.forEach(function(o){
+    if(o.q.indexOf('Creditcontract')===0){
+      o.q='Creditcontract Statistiek I: nog steeds onbeslist — vraag van 11 juli werd op 22 juli beantwoord zonder hem te beantwoorden';
+      o.since='2026-07-22';
+      o.why='Antwoord van Tamara Leuyckx (Faculteit PE, 22 juli) ging alleen over het rooster en verwees naar de docent in september. De tegenstrijdigheid website-vs-begeleider is niet aangeraakt.\n\nBesluit 28 juli: geen herhaalmail. Vraag mondeling op de infodag van 30 augustus.';
+    }});
+  S.facts.push(
+   {g:'D',t:'Vakkenpakket zoals zelf voorgesteld op 11 juli — sem 1: Statistiek I (CC), Klinische psychiatrie, eventueel Sociale psychologie I (3 SP); sem 2: Statistiek II, Onderzoeksmethoden en -technieken I: psychometrie. Totaal 24-27 SP. Haalbaarheid door faculteit NIET bevestigd.',s:'eigen mail 11-07-2026',d:'2026-07-28',tag:'vakken'},
+   {g:'D',t:'Psychometrie en onderzoeksmethoden I zijn hetzelfde vak: "Onderzoeksmethoden en -technieken I: psychometrie". De eerdere tegenstrijdigheid was een naamkwestie.',s:'eigen mail 11-07-2026',d:'2026-07-28',tag:'vakken'},
+   {g:'D',t:'Regel van de faculteit: staat een vak of WPO niet in het lessenrooster, dan is het overwegend zelfstudie.',s:'mail Tamara Leuyckx 22-07-2026',d:'2026-07-28',tag:'vakken'},
+   {g:'M',t:'Online lesrooster lijkt een VUB-login te vereisen, die je pas krijgt na ondertekening van het inschrijvingscontract. Niet geverifieerd.',s:'poging tot raadplegen 28-07',d:'2026-07-28',tag:'toelating'},
+   {g:'D',t:'Twee mailadressen in omloop: rochdi97@outlook.com (faculteit) en rochdi.houf@outlook.com (studentenadministratie). Contracttekenbericht kan in beide landen.',s:'headers van beide mails',d:'2026-07-28',tag:'toelating'}
+  );
+  S.open.push({q:'Kan ik het lessenrooster raadplegen zonder VUB-account?',since:'2026-07-28',why:'Tamara verwijst naar het online rooster, maar het account komt pas na de diplomacontrole. Zolang dit niet kan, blijft het aantal campusavonden onbekend.'});
+  S.log.push({d:TODAY,e:'bank v2 — mails van 22 en 28 juli verwerkt'});
+  S.v=2;localStorage.setItem('traject',JSON.stringify(S));
+}
+migrate();
 function save(){S.updated=new Date().toISOString();localStorage.setItem('traject',JSON.stringify(S));if(S.gh&&S.gh.auto)push(true);}
 var NOW=new Date(),TODAY=NOW.toISOString().slice(0,10);
 S.opens=S.opens||[];
