@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Traject">
+<meta name="theme-color" content="#faf9f5">
+<title>Traject</title>
+<style>
+:root{color-scheme:light;--ink:#1c1c1a;--mut:#6b6a64;--faint:#9a9891;--line:#e3e1d9;--card:#fff;--bg:#faf9f5;
+--warn:#854F0B;--warnbg:#FAEEDA;--dang:#A32D2D;--dangbg:#FCEBEB;--ok:#3B6D11;--okbg:#EAF3DE;--acc:#185FA5;--accbg:#E6F1FB}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:0 0 84px;background:var(--bg);color:var(--ink);
+font-family:ui-sans-serif,-apple-system,"Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.55}
+.wrap{max-width:620px;margin:0 auto;padding:16px 14px 0}
+h1{font-size:19px;font-weight:500;margin:0}
+h2{font-size:12.5px;font-weight:500;margin:22px 0 7px;color:var(--mut)}
+.hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.hd .d{font-size:12.5px;color:var(--faint)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:7px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lbl{font-size:15px}.sub{font-size:12.5px;color:var(--mut);margin-top:2px}
+.why{display:none;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mut)}
+.why.on{display:block}.why b{font-weight:500;color:var(--ink)}
+.g{display:inline-block;font-size:10.5px;font-weight:500;padding:1px 5px;border-radius:4px;margin-right:4px}
+.gR{background:var(--okbg);color:var(--ok)}.gD{background:var(--accbg);color:var(--acc)}.gM{background:var(--warnbg);color:var(--warn)}
+button{font:inherit;cursor:pointer;font-size:14px}
+.qb{background:none;border:1px solid var(--line);border-radius:6px;color:var(--mut);font-size:11.5px;padding:2px 8px}
+.pill{font-size:11.5px;padding:3px 8px;border-radius:6px;font-weight:500;white-space:nowrap}
+.pW{background:var(--warnbg);color:var(--warn)}.pD{background:var(--dangbg);color:var(--dang)}.pO{background:var(--okbg);color:var(--ok)}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:6px}
+.opt.sel{border-color:var(--ink);border-width:1.5px}
+.opt small{display:block;color:var(--mut);font-size:12px;margin-top:1px}
+.lock{background:#141412;color:#fff;border-radius:12px;padding:15px}
+.lock .t{font-size:17px;font-weight:500}.lock .s{font-size:12.5px;color:#b9b7b0;margin-top:2px}
+.lnk{background:none;border:none;color:#b9b7b0;font-size:12px;text-decoration:underline;padding:0;margin-top:9px}
+.stale{font-size:12px;color:var(--warn);background:var(--warnbg);border-radius:6px;padding:6px 10px;margin-top:8px}
+.btn{background:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;color:var(--ink)}
+.btn:active{transform:scale(.98)}
+.btnD{background:#141412;color:#fff;border-color:#141412}
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(250,249,245,.97);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;background:none;border:none;padding:11px 2px 12px;color:var(--faint);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav button.on{color:var(--ink)}
+.nav .ic{font-size:17px;line-height:1}
+.pane{display:none}.pane.on{display:block}
+textarea,input{font:inherit;font-size:15px;width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--card);color:var(--ink)}
+textarea{min-height:88px;resize:vertical}
+.q{font-size:17px;line-height:1.45;margin:0 0 4px}
+.ansbox{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.grade{display:flex;gap:6px;margin-top:12px}
+.grade button{flex:1;border-radius:8px;border:1px solid var(--line);background:var(--card);padding:9px 4px;font-size:13px}
+.empty{text-align:center;color:var(--faint);font-size:13.5px;padding:26px 10px}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--faint);margin-right:5px}
+.dot.ok{background:#639922}.dot.no{background:#D0CEC6}
+.mini{font-size:11.5px;color:var(--faint)}
+.bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:#639922}
+.tag{font-size:11px;color:var(--mut);background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd"><h1 id="ttl">Vanavond</h1><span class="d" id="today"></span></div>
+  <div id="p-now" class="pane on"></div>
+  <div id="p-oef" class="pane"></div>
+  <div id="p-bank" class="pane"></div>
+  <div id="p-set" class="pane"></div>
+</div>
+<div class="nav">
+  <button data-p="now" class="on"><span class="ic">◆</span>Vanavond</button>
+  <button data-p="oef"><span class="ic">◇</span>Oefenen</button>
+  <button data-p="bank"><span class="ic">▤</span>Bank</button>
+  <button data-p="set"><span class="ic">⚙</span>Sync</button>
+</div>
+
+<script>
+var SEED={v:1,updated:null,tonight:null,math:{lastConfirm:"2026-07-14",modules:2},
+facts:[
+{g:"D",t:"Statistiekketen is strikt volgtijdelijk: III vereist I en II; IV vereist I, II en III. Niet stapelbaar, niet inhaalbaar.",s:"caliweb-fiches",d:"2026-07-11",tag:"keten"},
+{g:"D",t:"Voorwaardelijk toegelaten tot schakelprogramma MSc psychologie, 90 SP, profiel klinische psychologie. Kenmerk 0670975.",s:"toelatingsmail VUB",d:"2026-07-28",tag:"toelating"},
+{g:"R",t:"Beheerst en getest: verzamelingen, deelverzamelingen, lege verzameling, singleton, unie, doorsnede, verschil, Venn, partities, geordende paren, cartesisch product.",s:"eigen bevestiging",d:"2026-07-14",tag:"wiskunde"},
+{g:"D",t:"Statistiek II heeft verplichte WPO's en een praktijkexamen met R of SPSS dat 30% van de punten bepaalt.",s:"caliweb-fiche",d:"2026-07-11",tag:"vakken"},
+{g:"D",t:"Klinische psychiatrie: aparte werkstudentaanbieding, studiegidsnr 1002767BEW, hoorcolleges via Canvas, zuiver kennisvak.",s:"caliweb-fiche",d:"2026-07-11",tag:"vakken"},
+{g:"R",t:"VOV: 125 uur per jaar bij voltijdse tewerkstelling en 30 SP. Vereist werkvestiging in het Vlaamse Gewest.",s:"eigen research + mail",d:"2026-07-02",tag:"vov"},
+{g:"M",t:"Ontslagbescherming vanaf officiële VOV-aanvraag tot einde opleiding. NIET geverifieerd.",s:"modeluitspraak",d:"2026-07-02",tag:"vov"}
+],
+open:[
+{q:"Creditcontract Statistiek I: website zegt werkstudenten kunnen géén CC, trajectbegeleider raadt CC juist aan. Welke geldt?",since:"2026-07-11",why:"Twee officiële bronnen spreken elkaar tegen. Blokkeert het anker van semester 1."},
+{q:"Vak semester 2: psychometrie of onderzoeksmethoden I?",since:"2026-07-11",why:"Caliweb-verificatie zegt psychometrie, profiel zegt onderzoeksmethoden I. Beide modeluitspraken, geen bevestigd."},
+{q:"Op welke avonden vallen de vakken van semester 1?",since:"2026-07-16",why:"Bepaalt of het te combineren is met voltijds werk. Staat in TimeEdit."},
+{q:"Verlofdagenplan voor 1-11 september Etterbeek?",since:"2026-07-09",why:"Elf dagen fysieke les, drie verlofdagen beschikbaar."}
+],
+deadlines:[
+{d:"2026-07-31",t:"Doorlopende opdracht €333",c:"anders groeit het stagegat van 8 maanden"},
+{d:"2026-08-07",t:"Tien Canvas-toetsen",c:"eigen finishlijn bouwverlofsprint"},
+{d:"2026-08-30",t:"Infodag VUB",c:"laatste kans om de creditcontract-vraag mondeling te stellen"},
+{d:"2026-09-01",t:"Voorbereidingscursus Etterbeek",c:"elf dagen fysiek, drie verlofdagen beschikbaar"},
+{d:"2026-09-21",t:"Start lessen",c:"vanaf hier is het traject live"}
+],
+cards:[
+{q:"Wat zijn de vier voorwaarden waaraan een verzameling deelverzamelingen moet voldoen om een partitie van V te zijn?",a:"1. De unie van alle deelverzamelingen is gelijk aan V.\n2. Geen enkele deelverzameling is leeg.\n3. De doorsnede van elk paar verschillende deelverzamelingen is leeg.\n4. Er is dus geen overlap tussen de deelverzamelingen.",box:1,due:"2026-07-28",m:"1.6"},
+{q:"Wat is het verschil tussen ∅ en {∅}?",a:"∅ is de lege verzameling: nul elementen.\n{∅} is een verzameling die één element bevat, namelijk de lege verzameling. Dus |{∅}| = 1.",box:1,due:"2026-07-28",m:"1.2"},
+{q:"Waarom geldt A ⊂ A voor elke verzameling A?",a:"Per definitie is A ⊂ B als elk element van A ook in B zit. Vul B = A in: elk element van A zit in A. Dat is triviaal waar, dus A ⊂ A.",box:1,due:"2026-07-28",m:"1.1"},
+{q:"Waarom geldt ∅ ⊂ A voor elke verzameling A?",a:"De definitie eist dat élk element van ∅ ook in A zit. ∅ heeft geen elementen, dus er is geen enkel geval dat de bewering kan schenden. De bewering is daarmee waar — dit heet vacuously true.",box:1,due:"2026-07-28",m:"1.1"},
+{q:"Neem A = {2,4,16} en B = {1,2,3,4,5,6,7,8}. Wat is A \\ B (het verschil)?",a:"{16}\n\nHet verschil A \\ B bevat alles wat in A zit maar niet in B. 2 en 4 zitten in beide, 16 alleen in A.",box:1,due:"2026-07-28",m:"1.3"},
+{q:"Wat is het verschil tussen unie en doorsnede? Formuleer beide in woorden.",a:"Unie A ∪ B: alle elementen die in A liggen, of in B, of in beide. Het is 'of', niet 'en'.\nDoorsnede A ∩ B: alleen de elementen die in A én in B liggen.",box:1,due:"2026-07-28",m:"1.3"},
+{q:"Waarom is (a,b) ≠ (b,a) terwijl {a,b} = {b,a}?",a:"Bij een geordend paar heeft de positie betekenis: het eerste element speelt een andere rol dan het tweede. Bij een verzameling telt alleen lidmaatschap, niet volgorde.",box:1,due:"2026-07-28",m:"1.5"},
+{q:"Neem A = {1,2} en B = {x,y}. Schrijf A × B volledig uit. Hoeveel elementen heeft het?",a:"A × B = {(1,x), (1,y), (2,x), (2,y)}\n\nVier elementen. In het algemeen: |A × B| = |A| · |B|.",box:1,due:"2026-07-28",m:"1.5"},
+{q:"Wat betekent het als de statistiekketen 'strikt volgtijdelijk' is, en wat is het gevolg van één zak?",a:"Statistiek III vereist geslaagd zijn voor I en II; IV vereist I, II en III. Er is één statistiekvak per opeenvolgend semester, niet stapelbaar en niet inhaalbaar.\n\nGevolg: zak je voor één, dan schuift het hele traject een vol jaar op.",box:1,due:"2026-07-28",m:"traject"},
+{q:"Hoeveel VOV-uren heb je recht op, en welke voorwaarde bepaalt of je ze houdt bij een jobwissel?",a:"125 uur per jaar bij voltijdse tewerkstelling met 30 SP.\n\nVoorwaarde: werkvestiging in het Vlaamse Gewest. Een nieuwe werkgever moet dus Vlaams zijn — dat is een hard criterium in de jobzoektocht, geen voorkeur.",box:1,due:"2026-07-28",m:"traject"}
+],
+log:[]};
+
+var S=JSON.parse(localStorage.getItem('traject')||'null')||SEED;
+function save(){S.updated=new Date().toISOString();localStorage.setItem('traject',JSON.stringify(S));if(S.gh&&S.gh.auto)push(true);}
+var NOW=new Date(),TODAY=NOW.toISOString().slice(0,10);
+S.opens=S.opens||[];
+function absence(){var o=S.opens.filter(function(x){return x!==TODAY});return o.length?Math.abs(days(o[o.length-1])):-1}
+function markOpen(){if(S.opens[S.opens.length-1]!==TODAY){S.opens.push(TODAY);S.opens=S.opens.slice(-120);localStorage.setItem('traject',JSON.stringify(S))}}
+function days(i){return Math.ceil((new Date(i+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5)}
+function nl(n){return n===0?'vandaag':n===1?'morgen':n<0?Math.abs(n)+' dagen geleden':'over '+n+' dagen'}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+document.getElementById('today').textContent=NOW.toLocaleDateString('nl-BE',{weekday:'long',day:'numeric',month:'long'});
+
+var OPTS=[{k:'stat',t:'Wiskunde / statistiek',s:'het anker — alles hangt hieraan'},
+{k:'admin',t:'VUB-administratie',s:'contract, creditcontract, trajectbegeleider'},
+{k:'lees',t:'Klinische psychiatrie lezen',s:'zacht vak, lage drempel'},
+{k:'rust',t:'Bewust niets',s:'gekozen, niet weggegleden'}];
+
+function dueCards(){return S.cards.filter(function(c){return days(c.due)<=0})}
+
+function renderNow(){
+  var h='',p=(S.tonight&&S.tonight.d===TODAY)?S.tonight:null,ab=absence();
+  if(ab>=3)h+='<div class="stale" style="margin:0 0 10px">'+ab+' dagen niet geopend. In die tijd is er niets bijgehouden — de bank staat stil, niet je traject.</div>';
+  if(p){var o=OPTS.filter(function(x){return x.k===p.k})[0];
+    h+='<div class="lock"><div class="t">'+o.t+'</div><div class="s">'+o.s+'</div><button class="lnk" id="unl">iets anders</button></div>';
+  }else{h+='<div style="font-size:12.5px;color:var(--mut);margin-bottom:7px">Eén ding. Kies.</div>';
+    OPTS.forEach(function(o){h+='<button class="opt" data-k="'+o.k+'">'+o.t+'<small>'+o.s+'</small></button>'});}
+
+  var dc=dueCards().length;
+  h+='<h2>Oefenen</h2><div class="card"><div class="row"><div><div class="lbl">'+(dc?dc+' kaarten klaar':'Niets openstaand')+'</div><div class="sub">'+S.cards.length+' in de bank</div></div>'+(dc?'<button class="btn btnD" id="go">Start</button>':'')+'</div></div>';
+
+  var d=Math.abs(days(S.math.lastConfirm));
+  h+='<h2>Ketengezondheid</h2><div class="card"><div class="row"><div><div class="lbl">Statistiek I</div><div class="sub">anker semester 1 — creditcontract onbeslist</div></div><button class="qb" data-w="k1">waarom</button></div><div class="why" id="k1"><span class="g gD">D</span>Fiches: III vereist I en II, IV vereist I t/m III. Strikt volgtijdelijk. Eén zak = een jaar vertraging.<br><b>Bron:</b> caliweb, 11 juli 2026</div></div>';
+  h+='<div class="card"><div class="row"><div><div class="lbl">Wiskunde</div><div class="sub">laatst bevestigd '+new Date(S.math.lastConfirm+'T00:00:00').toLocaleDateString('nl-BE',{day:'numeric',month:'long'})+'</div></div><button class="qb" data-w="k2">waarom</button></div><div class="why" id="k2"><span class="g gR">R</span>Alleen wat jij zelf bevestigt telt hier mee. Modeluitspraken over je voortgang worden niet meegerekend.</div>'+(d>=3?'<div class="stale">'+d+' dagen geen bevestiging. De app weet niet waar je staat.</div>':'')+'<div style="margin-top:9px"><button class="btn" id="conf">module afvinken</button> <span class="mini">'+S.math.modules+' bevestigd</span></div></div>';
+
+  h+='<h2>Vastgelopen</h2>';
+  S.open.forEach(function(o,i){var a=Math.abs(days(o.since));
+    h+='<div class="card"><div class="row"><div style="flex:1"><div class="lbl">'+esc(o.q)+'</div></div><span class="pill '+(a>14?'pD':'pW')+'">'+a+'d</span></div><div style="margin-top:8px"><button class="qb" data-w="o'+i+'">waarom</button> <button class="qb" data-res="'+i+'">opgelost</button></div><div class="why" id="o'+i+'">'+esc(o.why)+'<br><b>Open sinds:</b> '+o.since+'</div></div>'});
+  if(!S.open.length)h+='<div class="empty">Niets vastgelopen.</div>';
+
+  h+='<h2>Deadlines</h2>';
+  S.deadlines.forEach(function(x){var n=days(x.d);if(n<-2)return;
+    h+='<div class="card"><div class="row"><div style="flex:1"><div class="lbl">'+esc(x.t)+'</div><div class="sub">'+esc(x.c)+'</div></div><span class="pill '+(n<=3?'pD':n<=14?'pW':'pO')+'">'+nl(n)+'</span></div></div>'});
+
+  var el=document.getElementById('p-now');el.innerHTML=h;
+  if(p)document.getElementById('unl').onclick=function(){S.tonight=null;save();renderNow()};
+  el.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){S.tonight={k:b.dataset.k,d:TODAY};S.log.push({d:TODAY,e:'koos '+b.dataset.k});save();renderNow()}});
+  var g=document.getElementById('go');if(g)g.onclick=function(){tab('oef')};
+  document.getElementById('conf').onclick=function(){S.math.modules++;S.math.lastConfirm=TODAY;S.log.push({d:TODAY,e:'module bevestigd'});save();renderNow()};
+  el.querySelectorAll('[data-res]').forEach(function(b){b.onclick=function(){S.open.splice(+b.dataset.res,1);save();renderNow()}});
+  bindWhy(el);
+}
+
+var cur=null,shown=false;
+function renderOef(){
+  var el=document.getElementById('p-oef'),due=dueCards();
+  if(!due.length){el.innerHTML='<div class="empty">Geen kaarten klaar.<br><span class="mini">Nieuwe kaarten komen uit je studiesessies.</span></div>';return}
+  if(!cur||due.indexOf(cur)<0){cur=due[0];shown=false}
+  var h='<div class="mini" style="margin-bottom:8px">'+due.length+' te gaan · module '+cur.m+'</div>';
+  h+='<div class="card"><p class="q">'+esc(cur.q)+'</p>';
+  if(!shown){h+='<div style="margin-top:14px"><button class="btn btnD" id="rev" style="width:100%">Ik heb mijn antwoord</button></div><div class="mini" style="margin-top:8px;text-align:center">Het antwoord verschijnt pas nadat jij het jouwe hebt.</div>';}
+  else{h+='<div class="ansbox"><div style="white-space:pre-wrap">'+esc(cur.a)+'</div></div><div class="grade"><button data-r="0">Opnieuw</button><button data-r="1">Goed</button><button data-r="2">Makkelijk</button></div>';}
+  h+='</div>';
+  el.innerHTML=h;
+  var r=document.getElementById('rev');if(r)r.onclick=function(){shown=true;renderOef()};
+  el.querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){
+    var v=+b.dataset.r;cur.box=v===0?1:Math.min(4,cur.box+(v===2?2:1));
+    var iv=[0,1,3,7,21][cur.box];var nd=new Date();nd.setDate(nd.getDate()+iv);
+    cur.due=nd.toISOString().slice(0,10);S.log.push({d:TODAY,e:'kaart '+['opnieuw','goed','makkelijk'][v]});
+    cur=null;shown=false;save();renderOef();renderNow()}});
+}
+
+function renderBank(){
+  var h='<div class="card"><div class="lbl" style="margin-bottom:6px">Oogst uit een studiesessie</div><div class="sub" style="margin-bottom:9px">Vraag aan het eind van je sessie: <i>"geef me de kaarten als Vraag :: Antwoord, één per regel"</i>. Plak het blok hier.</div><textarea id="nc" placeholder="Wat is een partitie? :: Vier voorwaarden: ..."></textarea><div class="row" style="margin-top:8px"><input id="nm" placeholder="module (bv. 2.3)" style="width:auto;flex:1"><button class="btn btnD" id="addc">Maak kaarten</button></div></div>';
+  h+='<div class="card"><div class="lbl" style="margin-bottom:8px">Feit toevoegen</div><textarea id="nt" placeholder="Plak hier een samenvatting, mail of notitie."></textarea><div class="row" style="margin-top:8px"><select id="ng" style="width:auto;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card)"><option value="R">R — ik zeg het zelf</option><option value="D">D — document of mail</option><option value="M">M — model, ongeverifieerd</option></select><button class="btn btnD" id="add">Voeg toe</button></div></div>';
+  h+='<h2>'+S.facts.length+' entries</h2>';
+  S.facts.slice().reverse().forEach(function(f,i){
+    h+='<div class="card"><div><span class="g g'+f.g+'">'+f.g+'</span><span>'+esc(f.t)+'</span></div><div class="sub" style="margin-top:6px">'+esc(f.s)+' · '+f.d+' <span class="tag">'+(f.tag||'los')+'</span></div></div>'});
+  document.getElementById('p-bank').innerHTML=h;
+  document.getElementById('add').onclick=function(){
+    var t=document.getElementById('nt').value.trim();if(!t)return;
+    S.facts.push({g:document.getElementById('ng').value,t:t,s:'handmatig toegevoegd',d:TODAY,tag:'nieuw'});
+    save();renderBank()};
+  document.getElementById('addc').onclick=function(){
+    var raw=document.getElementById('nc').value,m=document.getElementById('nm').value.trim()||'los',n=0;
+    raw.split('\n').forEach(function(ln){
+      var i=ln.indexOf('::');if(i<1)return;
+      var q=ln.slice(0,i).trim(),a=ln.slice(i+2).trim();if(!q||!a)return;
+      S.cards.push({q:q,a:a.replace(/\\n/g,'\n'),box:1,due:TODAY,m:m});n++});
+    if(!n){alert('Geen regels met :: gevonden.');return}
+    S.math.lastConfirm=TODAY;S.math.modules++;
+    S.log.push({d:TODAY,e:n+' kaarten uit sessie ('+m+')'});
+    S.facts.push({g:'R',t:'Studiesessie module '+m+' — '+n+' kaarten gemaakt',s:'zelf geoogst in de app',d:TODAY,tag:'wiskunde'});
+    save();document.getElementById('nc').value='';renderBank();renderNow()};
+}
+
+function renderSet(){
+  var g=S.gh||{};
+  var h='<div class="card"><div class="lbl">Sync via GitHub</div><div class="sub" style="margin-bottom:10px">Repo en token blijven op dit toestel. Elke sync is een commit — je krijgt een tijdgestempeld spoor van elke wijziging.</div>'+
+  '<input id="grepo" placeholder="gebruiker/repo" value="'+esc(g.repo||'')+'" style="margin-bottom:6px">'+
+  '<input id="gtok" type="password" placeholder="token" value="'+esc(g.tok||'')+'" style="margin-bottom:6px">'+
+  '<div class="row"><label class="mini"><input type="checkbox" id="gauto" style="width:auto;margin-right:6px"'+(g.auto?' checked':'')+'>automatisch</label>'+
+  '<div><button class="btn" id="pull">Ophalen</button> <button class="btn btnD" id="pushb">Wegschrijven</button></div></div>'+
+  '<div class="mini" id="gst" style="margin-top:8px">'+(S.updated?'laatst opgeslagen '+new Date(S.updated).toLocaleString('nl-BE'):'nog niet opgeslagen')+'</div></div>';
+  h+='<div class="card"><div class="lbl" style="margin-bottom:8px">Zonder account</div><div class="row"><button class="btn" id="exp">Exporteer</button><button class="btn" id="imp">Importeer</button></div></div>';
+  h+='<div class="card"><div class="lbl" style="margin-bottom:6px">Op je telefoon</div><div class="sub">Open deze pagina in je browser en kies Toevoegen aan beginscherm. Dan opent hij als app, ook offline.</div></div>';
+  h+='<div class="card"><div class="lbl" style="margin-bottom:6px">Herinneringen</div><div class="sub">Nog geen push-server. Zolang die er niet is, waarschuwt de app pas bij openen — zet zelf een terugkerende herinnering op je telefoon.<br><br>Afwezigheid wordt wel geteld: '+(absence()<0?'eerste keer vandaag':absence()+' dagen sinds de vorige keer')+'.</div><input id="pushurl" placeholder="push-server URL (later)" value="'+esc((S.gh&&S.gh.push)||'')+'" style="margin-top:9px"></div>';
+  h+='<div class="card"><div class="lbl" style="margin-bottom:6px">Log</div>'+(S.log.slice(-8).reverse().map(function(l){return '<div class="mini">'+l.d+' · '+esc(l.e)+'</div>'}).join('')||'<div class="mini">leeg</div>')+'</div>';
+  document.getElementById('p-set').innerHTML=h;
+  document.getElementById('pushb').onclick=function(){saveGh();push()};
+  document.getElementById('pull').onclick=function(){saveGh();pull()};
+  document.getElementById('exp').onclick=function(){
+    var b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u;a.download='traject-'+TODAY+'.json';a.click()};
+  document.getElementById('imp').onclick=function(){
+    var i=document.createElement('input');i.type='file';i.accept='.json';
+    i.onchange=function(){var f=i.files[0],r=new FileReader();
+      r.onload=function(){try{S=JSON.parse(r.result);save();renderAll();alert('Ingeladen.')}catch(e){alert('Onleesbaar bestand.')}};r.readAsText(f)};
+    i.click()};
+}
+function saveGh(){var pu=document.getElementById('pushurl');S.gh={repo:document.getElementById('grepo').value.trim(),tok:document.getElementById('gtok').value.trim(),auto:document.getElementById('gauto').checked,push:pu?pu.value.trim():''};localStorage.setItem('traject',JSON.stringify(S))}
+function st(m){var e=document.getElementById('gst');if(e)e.textContent=m}
+function push(silent){
+  var g=S.gh;if(!g||!g.repo||!g.tok){if(!silent)alert('Vul repo en token in.');return}
+  var url='https://api.github.com/repos/'+g.repo+'/contents/traject.json';
+  fetch(url,{headers:{Authorization:'Bearer '+g.tok}}).then(function(r){return r.ok?r.json():{}}).then(function(j){
+    var body={message:'bank '+new Date().toISOString(),content:btoa(unescape(encodeURIComponent(JSON.stringify(S,null,2))))};
+    if(j.sha)body.sha=j.sha;
+    return fetch(url,{method:'PUT',headers:{Authorization:'Bearer '+g.tok,'Content-Type':'application/json'},body:JSON.stringify(body)})
+  }).then(function(r){st(r.ok?'weggeschreven '+new Date().toLocaleTimeString('nl-BE'):'mislukt — controleer token en repo')})
+  .catch(function(){st('geen verbinding')})
+}
+function pull(){
+  var g=S.gh;if(!g||!g.repo||!g.tok){alert('Vul repo en token in.');return}
+  fetch('https://api.github.com/repos/'+g.repo+'/contents/traject.json',{headers:{Authorization:'Bearer '+g.tok}})
+  .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+    S=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
+    localStorage.setItem('traject',JSON.stringify(S));renderAll();st('opgehaald')})
+  .catch(function(){st('ophalen mislukt')})
+}
+
+function bindWhy(el){el.querySelectorAll('[data-w]').forEach(function(b){b.onclick=function(){document.getElementById(b.dataset.w).classList.toggle('on')}})}
+var TT={now:'Vanavond',oef:'Oefenen',bank:'Bank',set:'Sync'};
+function tab(p){
+  document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+  document.getElementById('p-'+p).classList.add('on');
+  document.querySelectorAll('.nav button').forEach(function(b){b.classList.toggle('on',b.dataset.p===p)});
+  document.getElementById('ttl').textContent=TT[p];
+  if(p==='oef')renderOef();if(p==='bank')renderBank();if(p==='set')renderSet();
+}
+document.querySelectorAll('.nav button').forEach(function(b){b.onclick=function(){tab(b.dataset.p)}});
+function renderAll(){renderNow();}
+markOpen();renderAll();
+</script>
+</body>
+</html>
